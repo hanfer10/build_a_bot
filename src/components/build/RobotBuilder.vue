@@ -101,9 +101,6 @@ export default {
       return this.selectedRobot.head.onSale ? 'sale-border' : '';
     },
   },
-  updated() {
-    console.log('hello', this.selectedRobot.head);
-  },
   methods: {
     addToCart() {
       const robot = this.selectedRobot;
