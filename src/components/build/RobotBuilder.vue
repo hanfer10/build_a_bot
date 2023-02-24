@@ -1,6 +1,7 @@
 <template>
 <div class="content">
   <div class="preview">
+    <CollapsibleSectionComponent>
     <div class="preview-content">
       <div class="top-row">
         <img :src="selectedRobot.head.src"/>
@@ -14,8 +15,9 @@
         <img :src="selectedRobot.base.src"/>
       </div>
     </div>
+    </CollapsibleSectionComponent>
+    <button class="add-to-cart" @click="addToCart()">Add to Cart</button>
   </div>
-  <button class="add-to-cart" @click="addToCart()">Add to Cart</button>
   <div class="top-row">
       <!-- <div class="robot-name">
         {{ selectedRobot.head.title }}
@@ -25,7 +27,6 @@
         :parts="availableParts.heads"
         position="top"
         @partSelected="part => selectedRobot.head = part"
-        @click="tester()"
       />
   </div>
   <div class="middle-row">
@@ -33,19 +34,16 @@
       :parts="availableParts.arms"
       position="left"
       @partSelected="part => selectedRobot.leftArm = part"
-      @click="tester()"
     />
     <PartSelector
       :parts="availableParts.torsos"
       position="center"
       @partSelected="part => selectedRobot.torso = part"
-      @click="tester()"
     />
     <PartSelector
       :parts="availableParts.arms"
       position="right"
       @partSelected="part => selectedRobot.rightArm = part"
-      @click="tester()"
     />
   </div>
   <div class="bottom-row">
@@ -53,7 +51,6 @@
       :parts="availableParts.bases"
       position="bottom"
       @partSelected="part => selectedRobot.base = part"
-      @click="tester()"
     />
   </div>
   <div>
@@ -80,22 +77,21 @@
 import availableParts from '../../data/parts';
 import createdHookMixin from './created-hook-mixin';
 import PartSelector from './PartSelector.vue';
+import CollapsibleSectionComponent from '../shared/CollapsibleSectionComponent.vue';
 
 export default {
   name: 'RobotBuilder',
-  components: { PartSelector },
+  components: { PartSelector, CollapsibleSectionComponent },
   data() {
     return {
       availableParts,
       cart: [],
-      selectedRobot() {
-        return {
-          head: {},
-          leftArm: {},
-          rightArm: {},
-          torso: {},
-          base: {},
-        };
+      selectedRobot: {
+        head: {},
+        leftArm: {},
+        rightArm: {},
+        torso: {},
+        base: {},
       },
     };
   },
@@ -114,9 +110,6 @@ export default {
       const cost = robot.head.cost + robot.leftArm.cost
         + robot.rightArm.cost + robot.torso.cost + robot.base.cost;
       this.cart.push({ ...robot, cost });
-    },
-    tester() {
-      console.log('this.selectedRobot.base.title:', this.selectedRobot.head.title);
     },
   },
 };
@@ -228,7 +221,6 @@ export default {
 }
 .add-to-cart {
   position: absolute;
-  left: 30px;
   width: 210px;
   padding: 3px;
   font-size: 16px;
